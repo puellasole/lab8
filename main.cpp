@@ -1,20 +1,24 @@
-
 #include "lab8/Stack.hpp"
 
 int main() {
-    st::Stack<int> stack;
-    for (int i = 0; i < 10; ++i) {
-        stack.push(10 + i);
+    try
+    {
+        st::Stack<int> s(3);
+        s.push(4);
+        s.push(7);
+        s.push(8);
+        s.pop();
+        s.pop();
+        s.pop();
+        s.pop();
     }
-    std::cout << stack.empty() << std::endl;
-    std::cout << stack << "Size of stack: " << stack.size() << std::endl;
 
-    std::cout << "delete item: " << stack.top() << std::endl;
-    stack.pop();
-    std::cout << "Size changed " << stack.size() << ", the top el too" << stack.top() << std::endl;
-
-    st::Stack<std::string> stack1(10, "sdfs");
-    std::cout << stack1;
-
-    return 0;
+    catch (const std::out_of_range& error)
+    {
+        std::cerr << "You cannot delete elements because of " << error.what() << std::endl;
+    }
+    catch (const std::logic_error& error)
+    {
+        std::cerr << "You cannot refer to the top element because of " << error.what() << std::endl;
+    }
 }
