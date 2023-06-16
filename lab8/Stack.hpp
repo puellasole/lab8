@@ -3,89 +3,85 @@
 #include <vector>
 #include <iostream>
 
-
 namespace st {
-    template<class T>
-    class Stack {
+
+    template<typename T>
+    class Stack
+    {
+    private:
+        size_t m_size = 0;
+        T* m_stack = new T[m_size];
+        int m_top = 0;
+        bool m_isEmpty = 1;
+
     public:
-        Stack(int size) {
-            try {
-                sizeArray = size;
-                stack_array.reserve(size);
-            }
-            catch (const std::exception& e) {
-                std::cout << e.what() << std::endl;
-            }
+        Stack(size_t size)
+        {
+            m_size = size;
+            delete[] m_stack;
+            m_stack = new T[size];
+            std::cout << "construction" << std::endl;
         }
 
-        Stack(int size, T item) {
-            try {
-                sizeArray = size;
-                for (int i = 0; i < sizeArray; i++)
-                    stack_array.push_back(item);
-            }
-            catch (const std::exception& e) {
-                std::cout << e.what() << std::endl;
-                throw;
-            }
+        size_t size()
+        {
+            return m_size;
         }
 
-        Stack() {
-            sizeArray = 0;
+        bool empty()
+        {
+            return m_isEmpty;
         }
 
-        ~Stack() {
-
-        }
-
-        int size() {
-            return sizeArray;
-        }
-
-        bool empty() {
-            bool result = true;
-            if (sizeArray != 0)
-                result = false;
-            return result;
-        }
-
-        void push(const T& item) {
-            try {
-                sizeArray++;
-                stack_array.push_back(item);
-            }
-            catch (const std::exception& e) {
-                std::cout << e.what() << std::endl;
-            }
-        }
-
-        void pop() {
-            if (!empty()) {
-                sizeArray--;
-                stack_array.pop_back();
+        void push(const T& el)
+        {
+            if (m_top >= m_size)
+            {
+                throw std::out_of_range("Full stack");
             }
             else
-                throw std::out_of_range("stack is empty");
-        }
-
-        T& top() {
-            if (!empty())
-                return stack_array[sizeArray - 1];
-            throw std::logic_error("stack is empty");
-        }
-
-    private:
-        std::vector<T> stack_array;
-        int sizeArray;
-
-        friend std::ostream& operator<<(std::ostream& out, const Stack st) {
-            for (const T item : st.stack_array) {
-                out << item << " ";
+            {
+                m_stack[m_top] = el;
+                m_top++;
+                m_isEmpty = 0;
             }
-            out << std::endl;
-            return out;
+        }
+
+        void pop()
+        {
+            if (m_isEmpty)
+            {
+                throw std::out_of_range("Empty stack");
+            }
+            else
+            {
+                m_top--;
+                if (m_top == 0)
+                {
+                    m_isEmpty = 1;
+                }
+            }
+        }
+
+        T top()
+        {
+            if (m_isEmpty == 0)
+            {
+                return m_stack[m_top - 1];
+            }
+            else
+            {
+                throw std::logic_error("Top does not exist");
+            }
+        }
+
+        ~Stack()
+        {
+            delete[] m_stack;
+            std::cout << "destruction" << std::endl;
         }
     };
+
 
 }
 
